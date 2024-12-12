@@ -1,12 +1,17 @@
 const { nanoid } = require('nanoid');
 const books = require('./books');
 
-const getAllBooks = () => ({
-  status: 'success',
-  data: {
-    books
-  }
-});
+const getAllBooks = (request, h) => {
+  const { id, name, publisher } = books;
+  const response = h.response({
+    status: 'success',
+    data: {
+      books: { id, name, publisher }
+    }
+  });
+  response.code(200);
+  return response;
+};
 
 const addBooks = (request, h) => {
   const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload;
@@ -66,4 +71,23 @@ const addBooks = (request, h) => {
 
 };
 
-module.exports = { getAllBooks, addBooks };
+const detailBook = (request, h) => {
+  const bookId = request.params.bookId;
+  const book = books.filter((book) => book.id == bookId);
+  if (!book){
+    const response = h.response({
+      status: 'fail',
+      message: 'Buku tidak ditemukan'
+    });
+    response.code(404);
+    return response;
+  }
+  const response = h.response({
+    status: 'success',
+    data: book
+  });
+  response.code(200);
+  return response;
+};
+
+module.exports = { getAllBooks, addBooks, detailBook };
