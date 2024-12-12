@@ -2,11 +2,10 @@ const { nanoid } = require('nanoid');
 const books = require('./books');
 
 const getAllBooks = (request, h) => {
-  const { id, name, publisher } = books;
   const response = h.response({
     status: 'success',
     data: {
-      books: { id, name, publisher }
+      books: books.map(({ id, name, publisher }) => ({ id, name, publisher }))
     }
   });
   response.code(200);
