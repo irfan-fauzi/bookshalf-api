@@ -72,7 +72,7 @@ const addBooks = (request, h) => {
 
 const detailBook = (request, h) => {
   const bookId = request.params.bookId;
-  const book = books.filter((book) => book.id == bookId);
+  const book = books.filter((book) => book.id == bookId)[0];
   if (!book){
     const response = h.response({
       status: 'fail',
@@ -83,7 +83,9 @@ const detailBook = (request, h) => {
   }
   const response = h.response({
     status: 'success',
-    data: book
+    data: {
+      book
+    }
   });
   response.code(200);
   return response;
