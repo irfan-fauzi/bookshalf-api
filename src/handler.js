@@ -1,6 +1,7 @@
 const { nanoid } = require('nanoid');
 const books = require('./books');
 
+// get al books
 const getAllBooks = (request, h) => {
   const response = h.response({
     status: 'success',
@@ -90,5 +91,6 @@ const detailBook = (request, h) => {
   response.code(200);
   return response;
 };
+
 
 module.exports = { getAllBooks, addBooks, detailBook };
