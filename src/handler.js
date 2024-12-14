@@ -93,13 +93,14 @@ const detailBook = (request, h) => {
   response.code(200);
   return response;
 };
+
 // UPDATE BOOK -----------------------------------------------------------------------------
 const updateBook = (request, h) => {
   const id = request.params.bookId;
   const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload;
   const index = books.findIndex((book) => book.id == id);
 
-  if (index == -1){
+  if (index === -1){
     const response = h.response({
       status: 'fail',
       message: 'Gagal memperbarui buku. Id tidak ditemukan'
@@ -143,4 +144,25 @@ const updateBook = (request, h) => {
 
 };
 
-module.exports = { getAllBooks, addBooks, detailBook, updateBook };
+// DELETE SELECTED BOOK -------------------------------------------
+const deleteBook = (request, h) => {
+  const id = request.params.bookId;
+  const index = books.findIndex((book) => book.id == id);
+  if (index === -1){
+    const response = h.response({
+      status: 'fail',
+      message: 'Buku gagal dihapus. Id tidak ditemukan'
+    });
+    response.code(404);
+    return response;
+  }
+  books.splice(index, 1);
+  const response = h.response({
+    status: 'success',
+    message: 'Buku berhasil dihapus'
+  });
+  response.code(200);
+  return response;
+};
+
+module.exports = { getAllBooks, addBooks, detailBook, updateBook, deleteBook };
