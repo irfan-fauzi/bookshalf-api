@@ -1,19 +1,35 @@
 const { nanoid } = require('nanoid');
 const books = require('./books');
 
-// GET ALL BOOKS -------------------------------------------------------------------------------
+// GET ALL BOOKS
+
 const getAllBooks = (request, h) => {
+  const searchName = request.query.name;
+  if (!searchName) {
+    const response = h.response({
+      status: 'success',
+      data: {
+        books: books.map(({ id, name, publisher }) => ({ id, name, publisher }))
+      }
+    });
+    response.code(200);
+    return response;
+  }
+  const patern = new RegExp(`\\b${  searchName  }\\b`, 'i');
+  const filteredBooks = books.filter((book) => patern.test(book.name));
+
   const response = h.response({
     status: 'success',
     data: {
-      books: books.map(({ id, name, publisher }) => ({ id, name, publisher }))
+      books: filteredBooks.map(({ id, name, publisher }) => ({ id, name, publisher }))
     }
   });
   response.code(200);
   return response;
+
 };
 
-// ADD NEW BOOK -----------------------------------------------------------------------------------
+// ADD NEW BOOK
 const addBooks = (request, h) => {
   const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload;
   const finished = pageCount === readPage ? true : false;
@@ -165,4 +181,10 @@ const deleteBook = (request, h) => {
   return response;
 };
 
-module.exports = { getAllBooks, addBooks, detailBook, updateBook, deleteBook };
+// Query ------
+// const searchBook = (request, h) => {
+//   const { name } = request.query;
+//   return `saya mencari buku: ${name}`;
+// };
+
+module.exports = { getAllBooks, addBooks, detailBook, updateBook, deleteBook,  };
