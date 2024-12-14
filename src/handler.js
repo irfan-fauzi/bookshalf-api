@@ -1,21 +1,16 @@
 const { nanoid } = require('nanoid');
 const books = require('./books');
+const { responseAllBooks } = require('./utils');
+
 
 // GET ALL BOOKS
 
 const getAllBooks = (request, h) => {
-  const searchName = request.query.name;
-  if (!searchName) {
-    const response = h.response({
-      status: 'success',
-      data: {
-        books: books.map(({ id, name, publisher }) => ({ id, name, publisher }))
-      }
-    });
-    response.code(200);
-    return response;
+  const { name } = request.query;
+  if (!name) {
+    return responseAllBooks(h, 200, books, 'success');
   }
-  const patern = new RegExp(`\\b${  searchName  }\\b`, 'i');
+  const patern = new RegExp(`\\b${  name  }\\b`, 'i');
   const filteredBooks = books.filter((book) => patern.test(book.name));
 
   const response = h.response({
