@@ -1,4 +1,4 @@
-const responseAllBooks = (h, code, data, message) => {
+const responseData = (h, code, data, message) => {
   const response = h.response({
     status: message,
     data: {
@@ -9,4 +9,28 @@ const responseAllBooks = (h, code, data, message) => {
   return response;
 };
 
-module.exports = { responseAllBooks };
+const responseAdd = (h, code, data, message) => {
+  const response = h.response({
+    status: 'success',
+    message: message,
+    data: {
+      bookId: data.id
+    }
+  });
+  response.code(code);
+  return response;
+};
+
+const responsefail = (h, code, message) => {
+  const response = h.response({
+    status: 'fail',
+    message
+  });
+  response.code(code);
+  return response;
+};
+
+
+
+module.exports = { responseData, responsefail, responseAdd,  };
+
