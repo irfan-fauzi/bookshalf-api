@@ -6,7 +6,15 @@ const { responseData, responsefail, responseAdd } = require('./utils');
 // GET ALL BOOKS
 
 const getAllBooks = (request, h) => {
-  const { name } = request.query;
+  const { name, reading } = request.query;
+  if (reading == 0) {
+    const readingBook = books.filter((book) => book.reading == false);
+    return responseData(h, 200, readingBook, 'success');
+  };
+  if (reading == 1) {
+    const readingBook = books.filter((book) => book.reading == true);
+    return responseData(h, 200, readingBook, 'success');
+  }
   if (!name) return responseData(h, 200, books, 'success');
   const patern = new RegExp(`\\b${  name  }\\b`, 'i');
   const filteredBooks = books.filter((book) => patern.test(book.name));
