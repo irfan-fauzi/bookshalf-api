@@ -4,9 +4,8 @@ const { responseData, responsefail, responseAdd } = require('./utils');
 
 
 // GET ALL BOOKS
-
 const getAllBooks = (request, h) => {
-  const { name, reading } = request.query;
+  const { name, reading, finished } = request.query;
   if (reading == 0) {
     const readingBook = books.filter((book) => book.reading == false);
     return responseData(h, 200, readingBook, 'success');
@@ -15,10 +14,21 @@ const getAllBooks = (request, h) => {
     const readingBook = books.filter((book) => book.reading == true);
     return responseData(h, 200, readingBook, 'success');
   }
-  if (!name) return responseData(h, 200, books, 'success');
-  const patern = new RegExp(`\\b${  name  }\\b`, 'i');
-  const filteredBooks = books.filter((book) => patern.test(book.name));
-  return responseData(h, 200, filteredBooks, 'success');
+  if (finished == 0) {
+    const readingBook = books.filter((book) => book.finished == false);
+    return responseData(h, 200, readingBook, 'success');
+  }
+  if (finished == 1) {
+    const readingBook = books.filter((book) => book.finished == true);
+    return responseData(h, 200, readingBook, 'success');
+  }
+
+  if (name != undefined) {
+    const patern = new RegExp(`\\b${  name  }\\b`, 'i');
+    const filteredBooks = books.filter((book) => patern.test(book.name));
+    return responseData(h, 200, filteredBooks, 'success');
+  }
+  return responseData(h, 200, books, 'success');
 };
 
 // ADD NEW BOOK
